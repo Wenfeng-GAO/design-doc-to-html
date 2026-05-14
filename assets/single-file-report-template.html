@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><!-- REPORT_TITLE --></title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23181818'/%3E%3Ctext x='32' y='39' font-size='18' font-family='monospace' text-anchor='middle' fill='%23fffdfa'%3EHTML%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #f6f4ee;
+      --paper: #fffdfa;
+      --ink: #181818;
+      --muted: #65635e;
+      --line: #d8d2c6;
+      --accent: #087f7a;
+      --accent-2: #d79a2b;
+      --danger: #b5522a;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: Avenir Next, Aptos, Segoe UI, Helvetica Neue, Arial, sans-serif;
+      --serif: Charter, Georgia, Cambria, Times New Roman, serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.55; }
+    .page { max-width: 1240px; margin: 0 auto; padding: 26px; }
+    .topbar { display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 12px 14px; background: rgba(255,253,250,.9); border: 1px solid var(--line); }
+    nav { display: flex; flex-wrap: wrap; gap: 8px; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 13px; padding: 8px; }
+    .hero { min-height: 620px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(340px, .9fr); gap: 28px; align-items: center; }
+    h1 { margin: 0; font-family: var(--serif); font-size: clamp(48px, 8vw, 96px); line-height: .92; letter-spacing: 0; }
+    h2 { margin: 0; font-family: var(--serif); font-size: clamp(34px, 4vw, 60px); line-height: 1; letter-spacing: 0; }
+    .subtitle { max-width: 760px; color: #3d3a35; font-size: clamp(18px, 2vw, 23px); }
+    .panel { background: #23221f; color: var(--paper); padding: 22px; min-height: 360px; }
+    .section { padding: 72px 0 18px; scroll-margin-top: 80px; }
+    .section-head { display: grid; grid-template-columns: minmax(220px, .38fr) minmax(0, .62fr); gap: 28px; align-items: end; margin-bottom: 24px; }
+    .kicker { font-family: var(--mono); color: var(--accent); font-weight: 800; font-size: 12px; text-transform: uppercase; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .card { background: var(--paper); border: 1px solid var(--line); padding: 18px; }
+    .tabs { background: var(--paper); border: 1px solid var(--line); }
+    .tablist { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+    .tab { padding: 14px 16px; border: 0; border-right: 1px solid var(--line); background: transparent; cursor: pointer; color: var(--muted); }
+    .tab[aria-selected="true"] { background: #f0e3cf; color: var(--ink); font-weight: 800; }
+    .tabpanel { display: none; padding: 22px; }
+    .tabpanel.active { display: block; }
+    .reveal { opacity: 1; transform: none; animation: riseIn .5s ease both; }
+    @keyframes riseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    @media (max-width: 900px) {
+      .page { padding: 16px; }
+      .topbar, .hero, .section-head { grid-template-columns: 1fr; flex-direction: column; align-items: flex-start; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <strong><!-- REPORT_SHORT_LABEL --></strong>
+      <nav aria-label="页面导航">
+        <a href="#summary">摘要</a>
+        <a href="#decision">决策</a>
+        <a href="#design">设计</a>
+        <a href="#risks">风险</a>
+        <a href="#sources">来源</a>
+      </nav>
+    </header>
+    <main>
+      <section class="hero" id="summary">
+        <div class="reveal">
+          <div class="kicker"><!-- SOURCE_CONTEXT --></div>
+          <h1><!-- REPORT_TITLE --></h1>
+          <p class="subtitle"><!-- ONE_SENTENCE_THESIS --></p>
+        </div>
+        <aside class="panel reveal"><!-- KEY_FACTS_OR_VISUAL --></aside>
+      </section>
+      <section class="section" id="decision">
+        <div class="section-head reveal"><div><div class="kicker">01 / Decision</div><h2><!-- DECISION_TITLE --></h2></div><p><!-- DECISION_SUMMARY --></p></div>
+        <div class="grid"><article class="card"><!-- FACT_1 --></article><article class="card"><!-- FACT_2 --></article><article class="card"><!-- FACT_3 --></article></div>
+      </section>
+      <section class="section" id="design">
+        <div class="section-head reveal"><div><div class="kicker">02 / Design</div><h2><!-- DESIGN_TITLE --></h2></div><p><!-- DESIGN_SUMMARY --></p></div>
+        <div class="tabs reveal">
+          <div class="tablist" role="tablist">
+            <button class="tab" role="tab" aria-selected="true" aria-controls="tab-a">概览</button>
+            <button class="tab" role="tab" aria-selected="false" aria-controls="tab-b">细节</button>
+          </div>
+          <div class="tabpanel active" id="tab-a" role="tabpanel"><!-- TAB_A --></div>
+          <div class="tabpanel" id="tab-b" role="tabpanel"><!-- TAB_B --></div>
+        </div>
+      </section>
+      <section class="section" id="risks"><!-- RISKS_AND_REVIEWER_CHECKLIST --></section>
+      <section class="section" id="sources"><!-- SOURCE_TRACEABILITY --></section>
+    </main>
+  </div>
+  <script>
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        const parent = tab.closest(".tabs");
+        parent.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", "false"));
+        parent.querySelectorAll(".tabpanel").forEach(p => p.classList.remove("active"));
+        tab.setAttribute("aria-selected", "true");
+        document.getElementById(tab.getAttribute("aria-controls")).classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>

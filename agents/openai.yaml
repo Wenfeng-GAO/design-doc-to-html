@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Doc HTML Report"
+  short_description: "Turn design docs into interactive HTML reports"
+  default_prompt: "Use $design-doc-to-html to transform this design document into an interactive HTML report."
