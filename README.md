@@ -52,8 +52,9 @@ Summary mode should include:
 Detail mode should include everything above plus:
 
 - a source outline and coverage map;
-- every substantive original heading, requirement, decision, option, workflow, API/contract, data model, table, example, risk, open question, appendix, and cited source;
+- every substantive original heading, requirement, decision, option, workflow, API/contract, data model, table, code block, diagram/image/embed, example, risk, open question, appendix, and cited source;
 - full-content detail sections with anchors so readers can use the HTML instead of the original Markdown;
+- embedded asset handling for Obsidian `![[...]]` embeds and Markdown images, including visible incomplete-coverage warnings when assets cannot be resolved or rendered;
 - a final coverage check confirming source content was preserved, not just summarized.
 
 ## License

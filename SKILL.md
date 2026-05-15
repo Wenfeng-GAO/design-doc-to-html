@@ -26,7 +26,8 @@ In `detail` mode, do not hide essential content behind JS-only state. Collapsed 
    - Read the provided document first. If the input is a URL, local path, repo directory, DOCX, PDF, or Markdown file, extract the primary source content before summarizing.
    - Preserve traceability: record source paths/URLs, commit or timestamp when available, and any assumptions.
    - If the user asks for "latest" or a live URL/source, verify freshness before writing.
-   - For `detail` mode, build a source outline before writing HTML: all top-level and nested headings, tables, code/example blocks, diagrams, requirements, decisions, risks, open questions, appendices, and links. Use this as a coverage checklist.
+   - For `detail` mode, build a source outline before writing HTML: all top-level and nested headings, tables, code/example blocks, diagrams, images/media, Obsidian/wiki embeds, requirements, decisions, risks, open questions, appendices, and links. Use this as a coverage checklist.
+   - Detect embedded assets explicitly, including Obsidian/wiki embeds such as `![[diagram.excalidraw]]`, `![[image.png|caption]]`, and standard Markdown images such as `![caption](path/to/image.svg)`. Record the source line, raw reference, resolved path, media type, and coverage status for each one.
 
 2. **Choose the story and mode**
    - Identify the document type: proposal/RFC/KEP, product PRD, architecture plan, review packet, or status memo.
@@ -50,11 +51,13 @@ In `detail` mode, do not hide essential content behind JS-only state. Collapsed 
    - Use semantic HTML: `header`, `main`, `section`, `article`, `nav`, `button`, `details`.
    - Include an inline favicon data URI to avoid browser 404 noise.
    - Keep animations progressive. Content must be visible by default; never make first paint depend on IntersectionObserver or JS-only reveal state.
+   - In `detail` mode, embedded images and diagrams are substantive source content. Inline them into the HTML when possible: embed SVG markup directly, use `data:` URIs for raster images, or include rendered/exported diagram assets. If an asset must remain external, copy it beside the report and link it with a visible source note.
    - Use the starter in `assets/single-file-report-template.html` when speed matters.
    - For `detail` mode, use or adapt `assets/detail-report-template.html` when speed matters.
 
 5. **Verify before completion**
-   - For `detail` mode, run a coverage check against the source outline before visual QA. Every source outline item should map to an HTML anchor, table row, details block, card, code block, or source note. If anything is intentionally condensed, the target section must still preserve the facts and cite the source.
+   - For `detail` mode, run a coverage check against the source outline before visual QA. Every source outline item should map to an HTML anchor, table row, details block, card, media block, code block, or source note. If anything is intentionally condensed, the target section must still preserve the facts and cite the source.
+   - Treat unresolved embedded assets as incomplete coverage unless the report includes a visible warning that names the missing reference, where it appeared, which resolution paths were tried, and what information may be missing.
    - Run a local static server or open the file directly.
    - Use browser automation when available to check: console errors, desktop viewport, mobile viewport, key interactions, and horizontal overflow.
    - Save preview screenshots when helpful.
@@ -86,8 +89,34 @@ Acceptable transformations in `detail` mode:
 - Markdown tables become responsive HTML tables or comparison matrices.
 - Bullet lists become checklists, grouped rows, timelines, or nested lists.
 - Code fences remain complete code blocks unless the user explicitly asks to shorten them.
+- Obsidian/wiki embeds and Markdown images become visible media blocks with captions, source refs, and resolved/unresolved coverage state.
 - Long paragraphs can be split into scannable paragraphs/callouts, but the factual content must remain.
 - Repeated text can be deduplicated only if a nearby note states where it was merged.
+
+## Embedded Asset Handling
+
+Use this workflow for Markdown image references and Obsidian documents with wiki embeds:
+
+1. **Detect references**
+   - Match standard Markdown images: `![alt](path-or-url)`.
+   - Match Obsidian embeds: `![[target]]`, including aliases/sizes such as `![[target|caption]]` or `![[target|300]]`.
+   - Include Excalidraw references such as `![[Drawing.excalidraw]]`, `Drawing.excalidraw.md`, and exported `Drawing.excalidraw.svg`.
+
+2. **Resolve local paths**
+   - First try paths relative to the source document directory.
+   - Then try common Obsidian locations in the vault root: `attachments/`, `Attachments/`, `assets/`, `Assets/`, `images/`, `Images/`, `Excalidraw/`, and the vault root itself.
+   - For `*.excalidraw`, also try `*.excalidraw.md`, `*.excalidraw.svg`, and exported image siblings such as `.png` or `.webp`.
+   - Preserve URL assets as URLs, but note that a network-dependent asset means the single-file report is not fully self-contained unless it is downloaded and inlined.
+
+3. **Render or inline**
+   - Prefer inline SVG for `.svg` and exported Excalidraw SVG files.
+   - Use `data:` URIs for `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, and other raster assets when file size is reasonable.
+   - If only an `.excalidraw.md` source file exists and no renderer/export is available, include a visible media block with the Excalidraw source file link/path, a short extracted title/metadata when available, and mark the coverage as `unresolved-render`.
+   - Never leave only the raw `![[...]]` text as the replacement for a substantive diagram.
+
+4. **Report coverage**
+   - Coverage rows must distinguish text sections, tables, code blocks, rendered diagrams, rendered images, external media, and unresolved embeds.
+   - If any embedded asset is missing or cannot be rendered/inlined, set the report coverage status to incomplete and include a visible warning near the source section and in the evidence appendix.
 
 ## Design Rules
 
@@ -104,6 +133,7 @@ Acceptable transformations in `detail` mode:
 
 - For Markdown, parse headings and tables structurally where possible.
 - In `detail` mode, preserve Markdown document structure first, then improve it visually. Do not collapse multiple source sections into one unlabeled summary unless all original headings are represented in the full source map.
+- For Obsidian Markdown, resolve wiki links and embeds against the note directory and likely vault-level attachment folders. Embedded diagrams and images count as source content, not decorative assets.
 - For repo proposals, inspect nearby metadata files such as `kep.yaml`, `owners`, `README`, changelog, or issue links.
 - For DOCX/PDF, use available document tools or extraction libraries; keep source page/section references if possible.
 - Separate facts from interpretation. Label assumptions explicitly.
@@ -118,6 +148,7 @@ Acceptable transformations in `detail` mode:
 | Browser console has favicon 404 | Add inline favicon. |
 | No traceability | Add source section with paths, URLs, commit/timestamp. |
 | Detail mode loses source content | Build a source outline and coverage map; add missing sections before visual polish. |
+| Obsidian embed is left as raw `![[...]]` text | Resolve and render/inline the asset, or show an explicit unresolved-asset warning and mark coverage incomplete. |
 | Detail mode becomes raw Markdown in HTML | Convert Markdown structures into semantic HTML components while preserving full content. |
 | Unverified polish | Run desktop/mobile/browser checks before claiming done. |
 

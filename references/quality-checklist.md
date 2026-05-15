@@ -17,6 +17,11 @@ Use this section only when the requested mode is `detail` or the report is expec
 - A source outline was built before writing HTML.
 - Every substantive source heading appears in the HTML as a section, anchor, source-map row, details block, tab panel, table row, or appendix entry.
 - All original requirements, decisions, alternatives, workflows, APIs/contracts, data models, tables, examples, risks, open questions, appendices, and links are preserved.
+- Obsidian/wiki embeds such as `![[...]]` and standard Markdown images such as `![alt](...)` were detected and listed in the source outline.
+- Each embedded asset has a coverage state: rendered inline, copied/linked with visible source note, external URL, unresolved-render, or missing.
+- Excalidraw embeds resolve to exported media such as `.excalidraw.svg` when available, or are visibly flagged if only unresolved source files remain.
+- No substantive diagram/image is represented only by the raw Markdown or Obsidian embed text.
+- If any embedded asset is missing or cannot be rendered, the report has an incomplete coverage warning near the relevant section and in the evidence appendix.
 - Markdown tables are converted to responsive HTML tables or matrices without dropping rows or columns.
 - Code fences and command examples remain complete unless the user explicitly requested shortening.
 - Any deduplicated or merged source content is called out near the target section.
