@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><!-- REPORT_TITLE --> - Detail</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23181818'/%3E%3Ctext x='32' y='39' font-size='18' font-family='monospace' text-anchor='middle' fill='%23fffdfa'%3EDOC%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #f7f5f0;
+      --paper: #fffdf8;
+      --ink: #181818;
+      --muted: #62605b;
+      --line: #d9d3c8;
+      --accent: #0d766e;
+      --accent-soft: #dff1ee;
+      --warn: #a45f16;
+      --danger: #a33b2f;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: Avenir Next, Aptos, Segoe UI, Helvetica Neue, Arial, sans-serif;
+      --serif: Charter, Georgia, Cambria, Times New Roman, serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.58; }
+    a { color: var(--accent); }
+    code, pre { font-family: var(--mono); }
+    code { overflow-wrap: anywhere; }
+    pre { margin: 0; padding: 16px; overflow: auto; background: #20201d; color: #fffdf8; border-radius: 8px; }
+    .shell { display: grid; grid-template-columns: minmax(220px, 280px) minmax(0, 1fr); min-height: 100vh; }
+    .sidebar { position: sticky; top: 0; height: 100vh; overflow: auto; padding: 22px; border-right: 1px solid var(--line); background: rgba(255,253,248,.92); }
+    .brand { display: grid; gap: 4px; margin-bottom: 24px; }
+    .brand strong { font-size: 15px; }
+    .brand span { color: var(--muted); font-size: 13px; }
+    .nav-group { margin: 18px 0; }
+    .nav-label { margin-bottom: 8px; color: var(--muted); font-family: var(--mono); font-size: 11px; font-weight: 800; text-transform: uppercase; }
+    .sidebar a { display: block; padding: 7px 0; color: #35332f; font-size: 14px; text-decoration: none; }
+    .sidebar a:hover { color: var(--accent); }
+    .content { min-width: 0; padding: 28px clamp(18px, 4vw, 56px) 64px; }
+    .hero { min-height: 520px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr); gap: 28px; align-items: center; border-bottom: 1px solid var(--line); }
+    .kicker { color: var(--accent); font-family: var(--mono); font-size: 12px; font-weight: 900; text-transform: uppercase; }
+    h1 { margin: 10px 0 16px; font-family: var(--serif); font-size: clamp(44px, 7vw, 84px); line-height: .96; letter-spacing: 0; }
+    h2 { margin: 0 0 14px; font-family: var(--serif); font-size: clamp(30px, 4vw, 52px); line-height: 1.02; letter-spacing: 0; }
+    h3 { margin: 0 0 10px; font-size: 22px; letter-spacing: 0; }
+    p { max-width: 84ch; }
+    .subtitle { color: #3a3833; font-size: clamp(18px, 2vw, 23px); }
+    .meta-grid, .card-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .panel, .card, .callout, details { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; }
+    .panel { padding: 20px; }
+    .card, .callout { padding: 16px; }
+    .metric { display: grid; gap: 4px; }
+    .metric span { color: var(--muted); font-size: 12px; }
+    .metric strong { font-size: 22px; }
+    .section { padding: 54px 0 8px; scroll-margin-top: 24px; }
+    .section-head { display: grid; grid-template-columns: minmax(180px, .32fr) minmax(0, .68fr); gap: 24px; align-items: end; margin-bottom: 20px; }
+    .coverage { display: grid; gap: 10px; }
+    .coverage-row { display: grid; grid-template-columns: minmax(180px, .34fr) minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .coverage-row:last-child { border-bottom: 0; }
+    .chip { display: inline-flex; align-items: center; min-height: 26px; padding: 3px 8px; border-radius: 999px; background: var(--accent-soft); color: #07544f; font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .route-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    details { margin: 12px 0; }
+    summary { cursor: pointer; padding: 14px 16px; font-weight: 800; }
+    details > div { padding: 0 16px 16px; }
+    table { width: 100%; border-collapse: collapse; background: var(--paper); border: 1px solid var(--line); }
+    th, td { padding: 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { background: #ede7dc; font-size: 13px; }
+    td { overflow-wrap: anywhere; }
+    .tabs { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+    .tablist { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+    .tab { padding: 13px 15px; border: 0; border-right: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; font: inherit; }
+    .tab[aria-selected="true"] { background: #efe3d1; color: var(--ink); font-weight: 900; }
+    .tabpanel { display: none; padding: 18px; }
+    .tabpanel.active { display: block; }
+    .source-note { color: var(--muted); font-size: 13px; }
+    @media (max-width: 980px) {
+      .shell { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+      .content { padding: 18px 16px 48px; }
+      .hero, .section-head, .meta-grid, .card-grid, .route-grid, .coverage-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <strong><!-- REPORT_SHORT_LABEL --></strong>
+        <span>Detail mode: full source coverage</span>
+      </div>
+      <nav aria-label="报告导航">
+        <div class="nav-group">
+          <div class="nav-label">Start</div>
+          <a href="#summary">摘要</a>
+          <a href="#routes">阅读路径</a>
+          <a href="#coverage">源文档覆盖</a>
+        </div>
+        <div class="nav-group">
+          <div class="nav-label">Full Detail</div>
+          <a href="#section-1"><!-- SOURCE_SECTION_1_TITLE --></a>
+          <a href="#section-2"><!-- SOURCE_SECTION_2_TITLE --></a>
+          <a href="#section-3"><!-- SOURCE_SECTION_3_TITLE --></a>
+          <a href="#appendix">附录与证据</a>
+        </div>
+      </nav>
+    </aside>
+    <main class="content">
+      <section class="hero" id="summary">
+        <div>
+          <div class="kicker"><!-- SOURCE_CONTEXT --></div>
+          <h1><!-- REPORT_TITLE --></h1>
+          <p class="subtitle"><!-- ONE_SENTENCE_THESIS --></p>
+        </div>
+        <aside class="panel">
+          <div class="meta-grid">
+            <div class="metric"><span>Mode</span><strong>Detail</strong></div>
+            <div class="metric"><span>Coverage</span><strong><!-- COVERAGE_STATUS --></strong></div>
+            <div class="metric"><span>Source</span><strong><!-- SOURCE_COUNT --></strong></div>
+          </div>
+          <p><!-- SUMMARY_FACTS --></p>
+        </aside>
+      </section>
+
+      <section class="section" id="routes">
+        <div class="section-head">
+          <div><div class="kicker">01 / Routes</div><h2>阅读路径</h2></div>
+          <p><!-- ROUTES_INTRO --></p>
+        </div>
+        <div class="route-grid">
+          <article class="card"><!-- ROUTE_REVIEWER --></article>
+          <article class="card"><!-- ROUTE_IMPLEMENTER --></article>
+          <article class="card"><!-- ROUTE_OPERATOR --></article>
+          <article class="card"><!-- ROUTE_PRODUCT --></article>
+        </div>
+      </section>
+
+      <section class="section" id="coverage">
+        <div class="section-head">
+          <div><div class="kicker">02 / Coverage</div><h2>源文档覆盖</h2></div>
+          <p>Detail mode must map every substantive source item to visible report content. Replace these rows with the real source outline before delivery.</p>
+        </div>
+        <div class="panel coverage">
+          <div class="coverage-row"><strong><!-- SOURCE_OUTLINE_ITEM --></strong><span><!-- RENDERED_AS --></span><a class="chip" href="#section-1">Open</a></div>
+          <div class="coverage-row"><strong><!-- SOURCE_OUTLINE_ITEM --></strong><span><!-- RENDERED_AS --></span><a class="chip" href="#section-2">Open</a></div>
+          <div class="coverage-row"><strong><!-- SOURCE_OUTLINE_ITEM --></strong><span><!-- RENDERED_AS --></span><a class="chip" href="#appendix">Open</a></div>
+        </div>
+      </section>
+
+      <section class="section" id="section-1">
+        <div class="section-head">
+          <div><div class="kicker">03 / Source Section</div><h2><!-- SOURCE_SECTION_1_TITLE --></h2></div>
+          <p><!-- SOURCE_SECTION_1_SUMMARY --></p>
+        </div>
+        <!-- Preserve full section content here: paragraphs, lists, tables, code, examples, and source refs. -->
+        <div class="card-grid">
+          <article class="card"><!-- DETAIL_CARD_1 --></article>
+          <article class="card"><!-- DETAIL_CARD_2 --></article>
+          <article class="card"><!-- DETAIL_CARD_3 --></article>
+        </div>
+      </section>
+
+      <section class="section" id="section-2">
+        <div class="section-head">
+          <div><div class="kicker">04 / Source Section</div><h2><!-- SOURCE_SECTION_2_TITLE --></h2></div>
+          <p><!-- SOURCE_SECTION_2_SUMMARY --></p>
+        </div>
+        <div class="tabs">
+          <div class="tablist" role="tablist">
+            <button class="tab" role="tab" aria-selected="true" aria-controls="tab-design">设计细节</button>
+            <button class="tab" role="tab" aria-selected="false" aria-controls="tab-contracts">接口/契约</button>
+            <button class="tab" role="tab" aria-selected="false" aria-controls="tab-risks">风险/问题</button>
+          </div>
+          <div class="tabpanel active" id="tab-design" role="tabpanel"><!-- FULL_DESIGN_DETAIL --></div>
+          <div class="tabpanel" id="tab-contracts" role="tabpanel"><!-- FULL_CONTRACT_DETAIL --></div>
+          <div class="tabpanel" id="tab-risks" role="tabpanel"><!-- FULL_RISK_DETAIL --></div>
+        </div>
+      </section>
+
+      <section class="section" id="section-3">
+        <div class="section-head">
+          <div><div class="kicker">05 / Source Section</div><h2><!-- SOURCE_SECTION_3_TITLE --></h2></div>
+          <p><!-- SOURCE_SECTION_3_SUMMARY --></p>
+        </div>
+        <details open><summary><!-- DETAIL_BLOCK_TITLE --></summary><div><!-- FULL_DETAIL_BLOCK --></div></details>
+        <details><summary><!-- DETAIL_BLOCK_TITLE --></summary><div><!-- FULL_DETAIL_BLOCK --></div></details>
+      </section>
+
+      <section class="section" id="appendix">
+        <div class="section-head">
+          <div><div class="kicker">06 / Evidence</div><h2>附录与证据</h2></div>
+          <p><!-- EVIDENCE_SUMMARY --></p>
+        </div>
+        <div class="panel">
+          <!-- Include source paths, URLs, commits/timestamps, assumptions, appendices, and any condensed/merged notes. -->
+          <p class="source-note"><!-- SOURCE_TRACEABILITY --></p>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        const parent = tab.closest(".tabs");
+        parent.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", "false"));
+        parent.querySelectorAll(".tabpanel").forEach(p => p.classList.remove("active"));
+        tab.setAttribute("aria-selected", "true");
+        document.getElementById(tab.getAttribute("aria-controls")).classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>

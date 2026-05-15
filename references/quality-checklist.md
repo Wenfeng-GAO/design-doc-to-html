@@ -10,6 +10,19 @@ Use this before reporting completion.
 - Assumptions are labeled.
 - Risks, tradeoffs, and reviewer questions are visible without hunting.
 
+## Detail Mode Coverage
+
+Use this section only when the requested mode is `detail` or the report is expected to replace the original Markdown/design doc.
+
+- A source outline was built before writing HTML.
+- Every substantive source heading appears in the HTML as a section, anchor, source-map row, details block, tab panel, table row, or appendix entry.
+- All original requirements, decisions, alternatives, workflows, APIs/contracts, data models, tables, examples, risks, open questions, appendices, and links are preserved.
+- Markdown tables are converted to responsive HTML tables or matrices without dropping rows or columns.
+- Code fences and command examples remain complete unless the user explicitly requested shortening.
+- Any deduplicated or merged source content is called out near the target section.
+- Essential content is present in the HTML source and is not available only after remote fetches or JS-generated data.
+- The final report includes a coverage map from source outline items to rendered locations.
+
 ## Interaction
 
 - Every interactive control changes visible content.
