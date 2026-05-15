@@ -66,11 +66,14 @@
     th { background: #ede7dc; font-size: 13px; }
     td { overflow-wrap: anywhere; }
     .tabs { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-    .tablist { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+    .tablist { display: none; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+    .js-enabled .tablist { display: flex; }
     .tab { padding: 13px 15px; border: 0; border-right: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; font: inherit; }
     .tab[aria-selected="true"] { background: #efe3d1; color: var(--ink); font-weight: 900; }
-    .tabpanel { display: none; padding: 18px; }
-    .tabpanel.active { display: block; }
+    .tabpanel { display: block; padding: 18px; border-bottom: 1px solid var(--line); }
+    .tabpanel:last-child { border-bottom: 0; }
+    .js-enabled .tabpanel { display: none; border-bottom: 0; }
+    .js-enabled .tabpanel.active { display: block; }
     .source-note { color: var(--muted); font-size: 13px; }
     @media (max-width: 980px) {
       .shell { grid-template-columns: 1fr; }
@@ -206,6 +209,7 @@
         document.getElementById(tab.getAttribute("aria-controls")).classList.add("active");
       });
     });
+    document.documentElement.classList.add("js-enabled");
   </script>
 </body>
 </html>
